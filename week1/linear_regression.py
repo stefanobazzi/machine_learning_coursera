@@ -1,34 +1,45 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# class Hypothesis:
-    
-#     def foward(self):
-#         raise NotImplementedError
-    
-#     def backward(self):
-#         raise NotImplementedError
+class LinearRegressor:
 
-
-# class LinOneDim(Hypothesis):
-#     def __init__(self, t0, t1, alpha):
-#         self.t0 = t0
-#         self.t1 = t1
-#         self.alpha = alpha
-
-#     def foward(self, x):
-#         return self.t0 + self.t1 * x
-
-#     def backward(self):
-#         self.t0 = self-t0 - self.alpha
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self._errors = []
+        self.theta = np.random.rand(x.shape[1])
+        self.m = x.shape[1]
   
+    def h(self, x):
+        return np.dot(self.theta, x)
+
+    def gradient_descent(self, learning_rate=0.01):
+        _theta = []
+        for i, t in enumerate(self.theta):
+            gradient = np.sum((self.h(x) - y)*x[i] for x, y in zip(self.x, self.y))
+            new = t - learning_rate / self.m * gradient
+            _theta.append(new)
+        return np.array(_theta)
+      
+    def error(self):
+        return np.sum([(self.h(x) - y)**2 for x, y in zip(self.x, self.y)]) / (2 *self.m)
+
+    def predict(self, x):
+        return self.h(x)
+
+    def train(self, epochs=100, learning_rate=0.01):
+        for n in range(epochs):
+            self.theta = self.gradient_descent(learning_rate)
+            err = self.error()
+            self._errors.append(err)
+
+    def plot(self):
+        plt.plot(self._errors)
+        plt.show()
+
+
 def h(theta, x):
     return np.dot(theta, x)
-
-# def gradient_descent(data, t0=0, t1=1, alpha=0.01):
-#     t0 = t0 - alpha * sum([h(x, t0, t1) - y for x, y in data]) / len(data)
-#     t1 = t1 - alpha * sum([(h(x, t0, t1) - y) * x for x, y in data]) / len(data)
-#     return t0, t1
 
 def _gradient_descent(data, theta, alpha=0.01):
     return np.array([t - (alpha / len(data)) * np.sum([(h(theta, x) - y)*x[i] for x, y in data]) for i, t in enumerate(theta)])
@@ -37,8 +48,8 @@ def _gradient_descent(data, theta, alpha=0.01):
 def gradient_descent(x, y, theta, alpha=0.01):
     _theta = []
     for i, t in enumerate(theta):
-        gradient = (alpha / len(data)) * np.sum((h(theta, x) - y)*x[i] for x, y in zip(x, y))
-        new = t - (alpha / len(data)) * gradient
+        gradient = np.sum((h(theta, x) - y)*x[i] for x, y in zip(x, y))
+        new = t - alpha / len(x) * gradient
         _theta.append(new)
     return np.array(_theta)
 
@@ -52,8 +63,8 @@ theta = np.random.rand(2)
 errors = []
 #data = np.hstack((np.ones((len(data), 1)), data))
 print(theta)
-for n in range(1000):
-    theta = gradient_descent(data, y, theta, 0.3)
+for n in range(100):
+    theta = gradient_descent(data, y, theta, 0.008)
     err = error(theta, data, y)
     # if err < 0.001:
     #     print('Finish at', n)
@@ -63,3 +74,5 @@ for n in range(1000):
 print(err)
 plt.plot(errors)
 plt.show()
+
+print('test:', )
