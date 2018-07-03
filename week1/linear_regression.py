@@ -15,8 +15,8 @@ class LinearRegressor:
 
     def gradient_descent(self, learning_rate=0.01):
         _theta = []
-        for i, t in enumerate(self.theta):
-            gradient = np.sum((self.h(x) - y)*x[i] for x, y in zip(self.x, self.y))
+        for j, t in enumerate(self.theta):
+            gradient = np.sum((self.h(x) - y)*x[j] for x, y in zip(self.x, self.y))
             new = t - learning_rate / self.m * gradient
             _theta.append(new)
         return np.array(_theta)
