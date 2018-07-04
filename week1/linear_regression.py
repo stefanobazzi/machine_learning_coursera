@@ -53,6 +53,11 @@ def gradient_descent(x, y, theta, alpha=0.01):
         _theta.append(new)
     return np.array(_theta)
 
+
+def gradient_descent_vectorization(x, y, theta, alpha=0.01):    
+    return theta - alpha / len(x) * np.dot(x.T, h(x, theta) - y)
+
+
 def error(theta, x, y):
     return np.sum([(h(theta, x) - y)**2 for x, y in zip(x, y)]) / (2 *len(x))
 
@@ -63,8 +68,8 @@ theta = np.random.rand(2)
 errors = []
 #data = np.hstack((np.ones((len(data), 1)), data))
 print(theta)
-for n in range(100):
-    theta = gradient_descent(data, y, theta, 0.008)
+for n in range(1000):
+    theta = gradient_descent_vectorization(data, y, theta, 0.008)
     err = error(theta, data, y)
     # if err < 0.001:
     #     print('Finish at', n)
