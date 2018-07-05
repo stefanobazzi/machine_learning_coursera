@@ -1,7 +1,8 @@
 *.pdf
 *.pyc
+*.zip
 
 __pycache__/*
 .ipynb_checkpoints/
 .idea/
-
+machine-learning-ex1/
