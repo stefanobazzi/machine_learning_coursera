@@ -11,18 +11,14 @@ class LinearRegressor:
         self.m = x.shape[1]
   
     def h(self, x):
-        return np.dot(self.theta, x)
+        return np.dot(x, self.theta)
 
     def gradient_descent(self, learning_rate=0.01):
-        _theta = []
-        for j, t in enumerate(self.theta):
-            gradient = np.sum((self.h(x) - y)*x[j] for x, y in zip(self.x, self.y))
-            new = t - learning_rate / self.m * gradient
-            _theta.append(new)
-        return np.array(_theta)
+        gradient = np.dot(self.x.T, self.h(self.x) - self.y)
+        return theta - learning_rate / len(self.x) * gradient
       
     def error(self):
-        return np.sum([(self.h(x) - y)**2 for x, y in zip(self.x, self.y)]) / (2 *self.m)
+        return np.sum((self.h(self.x) - y)**2) / (2 *self.m)
 
     def predict(self, x):
         return self.h(x)
@@ -32,6 +28,9 @@ class LinearRegressor:
             self.theta = self.gradient_descent(learning_rate)
             err = self.error()
             self._errors.append(err)
+            if err == np.inf:
+                print('err: ', inf, 'at', n)
+                break
 
     def plot(self):
         plt.plot(self._errors)
@@ -63,12 +62,12 @@ def error(theta, x, y):
 
 
 data = np.array([[1, 1], [1, 2], [1, 4], [1, 8]])
-y = [1, 2, 4, 8]
+y = np.array([1, 2, 4, 8])
 theta = np.random.rand(2)
 errors = []
 #data = np.hstack((np.ones((len(data), 1)), data))
 print(theta)
-for n in range(1000):
+for n in range(100):
     theta = gradient_descent_vectorization(data, y, theta, 0.008)
     err = error(theta, data, y)
     # if err < 0.001:
