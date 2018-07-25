@@ -15,10 +15,10 @@ class LinearRegressor:
 
     def gradient_descent(self, learning_rate=0.01):
         gradient = np.dot(self.x.T, self.h(self.x) - self.y)
-        return theta - learning_rate / len(self.x) * gradient
+        return self.theta - learning_rate / len(self.x) * gradient
       
     def error(self):
-        return np.sum((self.h(self.x) - y)**2) / (2 *self.m)
+        return np.sum((self.h(self.x) - self.y)**2) / (2 *self.m)
 
     def predict(self, x):
         return self.h(x)
@@ -29,7 +29,7 @@ class LinearRegressor:
             err = self.error()
             self._errors.append(err)
             if err == np.inf:
-                print('err: ', inf, 'at', n)
+                print('err: ', np.inf, 'at', n)
                 break
 
     def plot(self):
@@ -60,23 +60,21 @@ def gradient_descent_vectorization(x, y, theta, alpha=0.01):
 def error(theta, x, y):
     return np.sum([(h(theta, x) - y)**2 for x, y in zip(x, y)]) / (2 *len(x))
 
-
-data = np.array([[1, 1], [1, 2], [1, 4], [1, 8]])
-y = np.array([1, 2, 4, 8])
-theta = np.random.rand(2)
-errors = []
-#data = np.hstack((np.ones((len(data), 1)), data))
-print(theta)
-for n in range(100):
-    theta = gradient_descent_vectorization(data, y, theta, 0.008)
-    err = error(theta, data, y)
-    # if err < 0.001:
-    #     print('Finish at', n)
-    #     break
-    errors.append(err)
+def test():
+    data = np.array([[1, 1], [1, 2], [1, 4], [1, 8]])
+    y = np.array([1, 2, 4, 8])
+    theta = np.random.rand(2)
+    errors = []
+    #data = np.hstack((np.ones((len(data), 1)), data))
     print(theta)
-print(err)
-plt.plot(errors)
-plt.show()
-
-print('test:', )
+    for n in range(100):
+        theta = gradient_descent_vectorization(data, y, theta, 0.008)
+        err = error(theta, data, y)
+        # if err < 0.001:
+        #     print('Finish at', n)
+        #     break
+        errors.append(err)
+        print(theta)
+    print(err)
+    plt.plot(errors)
+    plt.show()
